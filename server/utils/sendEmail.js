@@ -29,10 +29,9 @@ console.log("Rejected:", info.rejected);
 console.log("Response:", info.response);
 console.log("Message ID:", info.messageId);
   } catch (err) {
-    console.log(err.message);
-  }
-};
-
+  console.error("Email Error:", err);
+  throw err;
+}
 // Reset Password Email
 const sendResetPasswordEmail = async (email, resetURL) => {
   try {
@@ -60,8 +59,9 @@ console.log("Rejected:", info.rejected);
 console.log("Response:", info.response);
 console.log("Message ID:", info.messageId);
   } catch (err) {
-    console.log(err.message);
-  }
+  console.error("Email Error:", err);
+  throw err;
+}
 };
 
 module.exports = {
