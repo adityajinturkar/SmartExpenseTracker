@@ -6,7 +6,7 @@ const client = new OpenAI({
 });
 
 async function analyzeExpenses(transactions) {
-  const prompt = `
+ const prompt = `
 You are an expert financial advisor.
 
 Analyze these expense transactions:
@@ -22,6 +22,11 @@ Provide:
 5. Three actionable recommendations
 
 Respond in Markdown.
+
+IMPORTANT:
+- Do NOT wrap the response inside code fences.
+- Do NOT use triple backticks.
+- Return only raw Markdown.
 `;
 
   try {
@@ -36,8 +41,17 @@ Respond in Markdown.
       max_tokens:700,
     });
 
-    return response.choices[0].message.content;
-  } catch (error) {
+let content = response.choices[0].message.content;
+
+console.log("AI Raw Response:\n", content);
+
+content = content
+  .replace(/^```markdown\s*/i, "")
+  .replace(/^```\s*/i, "")
+  .replace(/```$/i, "")
+  .trim();
+
+return content;  } catch (error) {
     console.error("OpenRouter Error:", error);
     throw new Error("Failed to generate AI insights.");
   }
