@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import toast from "react-hot-toast";
+import "github-markdown-css/github-markdown.css";
 
 export default function AIInsights({ insights, loading, onRefresh }) {
   return (
@@ -127,9 +128,9 @@ export default function AIInsights({ insights, loading, onRefresh }) {
               dark:prose-a:text-indigo-400
             "
           >
-<ReactMarkdown remarkPlugins={[remarkGfm]}>
-  {insights}
-</ReactMarkdown>          </div>
+<div className="markdown-body bg-white dark:bg-gray-900 p-6 rounded-xl">
+  <ReactMarkdown>{insights}</ReactMarkdown>
+</div>        </div>
         </div>
       )}
     </div>
