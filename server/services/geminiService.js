@@ -26,13 +26,14 @@ Respond in Markdown.
 
   try {
     const response = await client.chat.completions.create({
-      model: "openrouter/auto",
+      model: "openrouter/free",
       messages: [
         {
           role: "user",
           content: prompt,
         },
       ],
+      max_tokens:700,
     });
 
     return response.choices[0].message.content;
