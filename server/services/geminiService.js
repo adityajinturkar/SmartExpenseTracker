@@ -6,27 +6,41 @@ const client = new OpenAI({
 });
 
 async function analyzeExpenses(transactions) {
- const prompt = `
-You are an expert financial advisor.
+const prompt = `
+You are a professional financial advisor.
 
 Analyze these expense transactions:
 
 ${JSON.stringify(transactions, null, 2)}
 
-Provide:
+Create a modern financial report.
 
-1. Spending Summary
-2. Largest Expense Category
-3. Savings Suggestions
-4. Budget Advice
-5. Three actionable recommendations
-
-Respond in Markdown.
-
-IMPORTANT:
-- Do NOT wrap the response inside code fences.
-- Do NOT use triple backticks.
+Formatting rules:
+- Use ## for main headings.
+- Use ### for section titles.
+- Use bullet points instead of long paragraphs.
+- Use tables wherever appropriate.
+- Highlight important numbers using **bold**.
+- Use emojis before each section.
+- Keep the response clean and readable.
+- Do NOT wrap the response in code fences.
 - Return only raw Markdown.
+
+The report should contain:
+
+## 📊 Spending Summary
+
+## 📂 Largest Expense Category
+
+## 💰 Savings Suggestions
+
+## 📈 Budget Advice
+
+## ✅ Actionable Recommendations
+
+## 🎯 Overall Financial Health Score (0-100)
+
+## 📅 Next Month Goal
 `;
 
   try {

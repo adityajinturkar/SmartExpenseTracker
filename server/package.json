@@ -23,7 +23,8 @@
     "mongoose": "^8.18.0",
     "nodemailer": "^9.0.3",
     "openai": "^6.48.0",
-    "react-markdown": "^10.1.0"
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
