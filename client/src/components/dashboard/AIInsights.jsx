@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import toast from "react-hot-toast";
 
@@ -126,8 +127,9 @@ export default function AIInsights({ insights, loading, onRefresh }) {
               dark:prose-a:text-indigo-400
             "
           >
-            <ReactMarkdown>{insights}</ReactMarkdown>
-          </div>
+<ReactMarkdown remarkPlugins={[remarkGfm]}>
+  {insights}
+</ReactMarkdown>          </div>
         </div>
       )}
     </div>
