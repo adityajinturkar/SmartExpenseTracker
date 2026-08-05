@@ -8,9 +8,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-transporter.verify(function (error, success) {
-  if (error) {
-    console.log(error);
+transporter.verify((err, success) => {
+  if (err) {
+    console.error("SMTP Verify Error:", err);
   } else {
     console.log("SMTP Ready");
   }
