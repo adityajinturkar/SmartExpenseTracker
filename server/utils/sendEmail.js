@@ -1,35 +1,12 @@
-const dns = require("dns");
-dns.setDefaultResultOrder("ipv4first");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  family: 4, // Force IPv4
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
-transporter.verify((err, success) => {
-  if (err) {
-    console.error("SMTP Verify Error:", err);
-  } else {
-    console.log("SMTP Ready");
-  }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Welcome Email
 const sendWelcomeEmail = async (name, email) => {
   try {
-    const info = await transporter.sendMail({
-      from: `"SmartExpenseAI" <${process.env.EMAIL_USER}>`,
+    await resend.emails.send({
+      from: "SmartExpenseAI <onboarding@resend.dev>",
       to: email,
       subject: "🎉 Welcome to SmartExpenseAI",
       html: `
@@ -41,12 +18,9 @@ const sendWelcomeEmail = async (name, email) => {
       `,
     });
 
-    console.log("Accepted:", info.accepted);
-    console.log("Rejected:", info.rejected);
-    console.log("Response:", info.response);
-    console.log("Message ID:", info.messageId);
+    console.log("✅ Welcome email sent");
   } catch (err) {
-    console.error("Email Error:", err);
+    console.error(err);
     throw err;
   }
 };
@@ -54,8 +28,8 @@ const sendWelcomeEmail = async (name, email) => {
 // Reset Password Email
 const sendResetPasswordEmail = async (email, resetURL) => {
   try {
-    const info = await transporter.sendMail({
-      from: `"SmartExpenseAI" <${process.env.EMAIL_USER}>`,
+    await resend.emails.send({
+      from: "SmartExpenseAI <onboarding@resend.dev>",
       to: email,
       subject: "Reset Your Password",
       html: `
@@ -73,12 +47,9 @@ const sendResetPasswordEmail = async (email, resetURL) => {
       `,
     });
 
-    console.log("Accepted:", info.accepted);
-    console.log("Rejected:", info.rejected);
-    console.log("Response:", info.response);
-    console.log("Message ID:", info.messageId);
+    console.log("✅ Reset email sent");
   } catch (err) {
-    console.error("Email Error:", err);
+    console.error(err);
     throw err;
   }
 };
