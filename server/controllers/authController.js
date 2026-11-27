@@ -6,7 +6,8 @@ const {
   sendWelcomeEmail,
   sendResetPasswordEmail,
 } = require("../utils/sendEmail");
-// ==REGISTER ==
+
+// == REGISTER ==
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -47,8 +48,7 @@ exports.register = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
-
+    console.error("Registration error:", error.message);
     res.status(500).json({
       success: false,
       message: "Server Error",
@@ -59,14 +59,8 @@ exports.register = async (req, res) => {
 // === FORGOT PASSWORD ===
 exports.forgotPassword = async (req, res) => {
   try {
-    console.log("===== Forgot Password Called =====");
-    console.log(req.body);
-
     const { email } = req.body;
-
     const user = await User.findOne({ email });
-
-    console.log("User:", user);
 
     if (!user) {
       return res.status(404).json({
@@ -76,27 +70,19 @@ exports.forgotPassword = async (req, res) => {
     }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
-
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
-
     await user.save();
 
     const resetURL = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
-
-    console.log("Reset URL:", resetURL);
-
     await sendResetPasswordEmail(user.email, resetURL);
-
-    console.log("Email Sent Successfully");
 
     res.status(200).json({
       success: true,
       message: "Password reset link has been sent.",
     });
   } catch (error) {
-    console.log(error);
-
+    console.error("Forgot password error:", error.message);
     res.status(500).json({
       success: false,
       message: "Server Error",
@@ -123,11 +109,9 @@ exports.resetPassword = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     user.password = hashedPassword;
     user.resetPasswordToken = null;
     user.resetPasswordExpire = null;
-
     await user.save();
 
     res.status(200).json({
@@ -135,8 +119,7 @@ exports.resetPassword = async (req, res) => {
       message: "Password reset successfully.",
     });
   } catch (error) {
-    console.error(error);
-
+    console.error("Reset password error:", error.message);
     res.status(500).json({
       success: false,
       message: "Server Error",
@@ -148,8 +131,6 @@ exports.resetPassword = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // Check if email exists
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -159,13 +140,8 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Compare password
-    console.log("Entered Password:", password);
-    console.log("Stored Hash:", user.password);
-
     const isMatch = await bcrypt.compare(password, user.password);
 
-    console.log("Password Match:", isMatch);
     if (!isMatch) {
       return res.status(400).json({
         success: false,
@@ -173,7 +149,6 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Generate JWT Token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
@@ -189,8 +164,7 @@ exports.login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
-
+    console.error("Login error:", error.message);
     res.status(500).json({
       success: false,
       message: "Server Error",
@@ -201,12 +175,12 @@ exports.login = async (req, res) => {
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
-
     res.status(200).json({
       success: true,
       user,
     });
   } catch (error) {
+    console.error("Profile error:", error.message);
     res.status(500).json({
       success: false,
       message: "Server Error",
