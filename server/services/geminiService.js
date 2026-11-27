@@ -66,15 +66,18 @@ Use only the supplied figures. Do not invent a budget or income. If there is too
 
   try {
     const response = await client.chat.completions.create({
-      model: "openrouter/free",
+      // Pin a known free text model instead of randomly routing each request.
+      model: "baidu/ernie-5.5-flash-preview:free",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 1000,
+      max_tokens: 700,
+      temperature: 0.2,
     });
 
     const content = response.choices?.[0]?.message?.content;
 
     if (typeof content !== "string" || !content.trim()) {
       console.error("OpenRouter returned an empty AI response:", {
+        model: response.model ?? "baidu/ernie-5.5-flash-preview:free",
         finishReason: response.choices?.[0]?.finish_reason ?? null,
         hasChoices: Array.isArray(response.choices) && response.choices.length > 0,
       });
