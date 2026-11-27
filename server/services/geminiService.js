@@ -47,7 +47,7 @@ The report should contain:
     const response = await client.chat.completions.create({
       model: "openrouter/free",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 700,
+      max_tokens: 1500,
     });
 
     const content = response.choices?.[0]?.message?.content;
