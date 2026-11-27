@@ -6,54 +6,34 @@ const client = new OpenAI({
 });
 
 async function analyzeExpenses(transactions) {
+  // Keep the prompt compact so free model routes have enough output budget.
   const prompt = `
-You are a professional financial advisor.
+Act as a practical personal-finance coach. Analyze this transaction data:
+${JSON.stringify(transactions)}
 
-Analyze these expense transactions:
+Return a concise Markdown report (maximum 350 words). Use only the data provided; do not invent income, budgets, dates, or transactions. If data is insufficient, say so clearly.
 
-${JSON.stringify(transactions, null, 2)}
-
-Create a modern financial report.
-
-Formatting rules:
-- Use ## for main headings.
-- Use ### for section titles.
-- Use bullet points instead of long paragraphs.
-- Use tables wherever appropriate.
-- Highlight important numbers using **bold**.
-- Use emojis before each section.
-- Keep the response clean and readable.
-- Do NOT wrap the response in code fences.
-- Return only raw Markdown.
-
-The report should contain:
-
+Include these sections:
 ## 📊 Spending Summary
-
 ## 📂 Largest Expense Category
-
 ## 💰 Savings Suggestions
-
 ## 📈 Budget Advice
-
 ## ✅ Actionable Recommendations
-
-## 🎯 Overall Financial Health Score (0-100)
-
+## 🎯 Financial Health Score (0-100)
 ## 📅 Next Month Goal
+
+Use short bullets, explain the score briefly, and avoid large tables. Return raw Markdown only, without code fences.
 `;
 
   try {
     const response = await client.chat.completions.create({
       model: "openrouter/free",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 1500,
+      max_tokens: 2000,
     });
 
     const content = response.choices?.[0]?.message?.content;
 
-    // Some free-model routes can return a successful response with no text.
-    // Handle that explicitly instead of crashing on content.replace().
     if (typeof content !== "string" || !content.trim()) {
       console.error("OpenRouter returned an empty AI response:", {
         finishReason: response.choices?.[0]?.finish_reason ?? null,
