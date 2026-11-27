@@ -6,7 +6,7 @@ const client = new OpenAI({
 });
 
 async function analyzeExpenses(transactions) {
-const prompt = `
+  const prompt = `
 You are a professional financial advisor.
 
 Analyze these expense transactions:
@@ -46,28 +46,30 @@ The report should contain:
   try {
     const response = await client.chat.completions.create({
       model: "openrouter/free",
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      max_tokens:700,
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 700,
     });
 
-let content = response.choices[0].message.content;
+    const content = response.choices?.[0]?.message?.content;
 
-console.log("AI Raw Response:\n", content);
+    // Some free-model routes can return a successful response with no text.
+    // Handle that explicitly instead of crashing on content.replace().
+    if (typeof content !== "string" || !content.trim()) {
+      console.error("OpenRouter returned an empty AI response:", {
+        finishReason: response.choices?.[0]?.finish_reason ?? null,
+        hasChoices: Array.isArray(response.choices) && response.choices.length > 0,
+      });
+      throw new Error("The AI provider returned an empty response. Please try again.");
+    }
 
-content = content
-  .replace(/^```markdown\s*/i, "")
-  .replace(/^```\s*/i, "")
-  .replace(/```$/i, "")
-  .trim();
-
-return content;  } catch (error) {
-    console.error("OpenRouter Error:", error);
-    throw new Error("Failed to generate AI insights.");
+    return content
+      .replace(/^\`\`\`markdown\s*/i, "")
+      .replace(/^\`\`\`\s*/i, "")
+      .replace(/\`\`\`$/i, "")
+      .trim();
+  } catch (error) {
+    console.error("OpenRouter Error:", error.message);
+    throw new Error("Failed to generate AI insights. Please try again.");
   }
 }
 
