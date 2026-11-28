@@ -18,18 +18,19 @@ export default function EditTransactionModal({
     date: "",
   });
 
-  useEffect(() => {
-    if (transaction) {
-      setFormData({
-        type: transaction.type,
-        title: transaction.title,
-        amount: transaction.amount,
-        category: transaction.category,
-        description: transaction.description || "",
-        date: transaction.date?.split("T")[0],
-      });
-    }
-  }, [transaction]);
+ useEffect(() => {
+  if (transaction) {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setFormData({
+      type: transaction.type,
+      title: transaction.title,
+      amount: transaction.amount,
+      category: transaction.category,
+      description: transaction.description || "",
+      date: transaction.date?.split("T")[0] || "",
+    });
+  }
+}, [transaction]);
 
   const [loading, setLoading] = useState(false);
 
@@ -60,7 +61,7 @@ export default function EditTransactionModal({
 
       onSuccess();
       onClose();
-    } catch (err) {
+    } catch {
       toast.error("Update Failed");
     } finally {
       setLoading(false);
@@ -174,8 +175,13 @@ export default function EditTransactionModal({
           />
 
           <div className="md:col-span-2">
-            <textarea rows={4} className={`${inputClass} resize-none`} />
-          </div>
+<textarea
+  name="description"
+  rows={4}
+  value={formData.description}
+  onChange={handleChange}
+  className={`${inputClass} resize-none`}
+/>          </div>
 
           <div className="md:col-span-2 flex justify-end gap-4 mt-2">
             <button

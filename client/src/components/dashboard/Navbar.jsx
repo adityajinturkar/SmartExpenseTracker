@@ -18,23 +18,30 @@ export default function Navbar({ darkMode, setDarkMode, notifications, user }) {
   };
 
   const today = new Date().toLocaleDateString("en-IN", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+});
 
   return (
     <>
       <nav className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">💰</span>
-            <h1 className="text-lg sm:text-xl lg:text-2xl  font-bold text-gray-800 dark:text-white">
-              SmartExpenseAI
-            </h1>
-          </div>
+
+         {/* Logo and Date */}
+<div className="flex items-center gap-2 shrink-0">
+  <span className="text-2xl">💰</span>
+
+  <div className="flex flex-col">
+    <h1 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white whitespace-nowrap">
+      SmartExpenseAI
+    </h1>
+
+    <span className="hidden xl:block text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+      {today}
+    </span>
+  </div>
+</div>
 
           {/* Navigation */}
           <div className="hidden lg:flex items-center gap-8 font-medium text-gray-700 dark:text-gray-200">
@@ -84,9 +91,9 @@ export default function Navbar({ darkMode, setDarkMode, notifications, user }) {
                 className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
               >
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-gray-900 dark:text-white">
-                    Welcome,
-                  </span>
+                  <span className="hidden sm:block font-medium text-gray-900 dark:text-white">
+  Welcome,
+</span>
 
                   <span className=" hidden md:block font-semibold text-gray-900 dark:text-white">
                     {user?.name?.split(" ")[0] || "User"}
@@ -175,7 +182,7 @@ export default function Navbar({ darkMode, setDarkMode, notifications, user }) {
             </a>
 
             <a
-              href="#home"
+              href="#features"
               onClick={() => setMobileMenuOpen(false)}
               className="px-4 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-800 transition"
             >
@@ -183,7 +190,7 @@ export default function Navbar({ darkMode, setDarkMode, notifications, user }) {
             </a>
 
             <a
-              href="#home"
+              href="#dashboard"
               onClick={() => setMobileMenuOpen(false)}
               className="px-4 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-800 transition"
             >
@@ -191,7 +198,7 @@ export default function Navbar({ darkMode, setDarkMode, notifications, user }) {
             </a>
 
             <a
-              href="#home"
+              href="#ai"
               onClick={() => setMobileMenuOpen(false)}
               className="px-4 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-800 transition"
             >
@@ -199,15 +206,15 @@ export default function Navbar({ darkMode, setDarkMode, notifications, user }) {
             </a>
 
             <a
-              href="#home"
+              href="#transactions"
               onClick={() => setMobileMenuOpen(false)}
               className="px-4 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-800 transition"
             >
-              Transaction
+              Transactions
             </a>
 
             <a
-              href="#home"
+              href="#about"
               onClick={() => setMobileMenuOpen(false)}
               className="px-4 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-800 transition"
             >
@@ -215,7 +222,7 @@ export default function Navbar({ darkMode, setDarkMode, notifications, user }) {
             </a>
 
             <a
-              href="#home"
+              href="#contact"
               onClick={() => setMobileMenuOpen(false)}
               className="px-4 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-800 transition"
             >

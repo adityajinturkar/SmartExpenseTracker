@@ -88,7 +88,7 @@ const fetchSummary = async () => {
   try {
     const { data } = await api.get("/transactions/summary");
     setSummary(data.summary);
-  } catch (err) {
+  } catch  {
     toast.error("Unable to load summary");
   }
 };
@@ -97,7 +97,7 @@ const fetchSummary = async () => {
   try {
     const { data } = await api.get("/transactions");
     setTransactions(data.transactions);
-  } catch (err) {
+  } catch {
     toast.error("Unable to load transactions");
   }
 };
@@ -144,7 +144,7 @@ const fetchSummary = async () => {
 
       fetchSummary();
       fetchTransactions();
-    } catch (err) {
+    } catch {
       toast.error("Delete Failed");
     }
   };
@@ -207,6 +207,7 @@ if (loading) {
       />
 
       <div className="max-w-7xl mx-auto p-8">
+          <section id="home" className="scroll-mt-20">
         <HeroSection
           onAddTransaction={() => {
             document
@@ -215,9 +216,11 @@ if (loading) {
           }}
           onGenerateAI={fetchAIInsights}
         />
+          </section>
+
         <StatsSection summary={summary} transactions={transactions} />
 
-        <section id="dashboard">
+        <section id="dashboard" className="scroll-mt-20">
           <ChartsSection
             summary={summary}
             transactions={transactions}
@@ -225,7 +228,7 @@ if (loading) {
           />
         </section>
 
-        <section id="ai">
+        <section id="ai" className="scroll-mt-20">
           <AIInsights
             insights={insights}
             loading={loadingAI}
@@ -246,14 +249,13 @@ if (loading) {
           darkMode={darkMode}
         />
 
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          <ExportExcel transactions={filteredTransactions} />
-
-          <ExportPDF transactions={filteredTransactions} summary={summary} />
-        </div>
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mt-5 mb-5">
+  <ExportExcel transactions={filteredTransactions} />
+  <ExportPDF transactions={filteredTransactions} summary={summary} />
+</div>
 
         <div>
-          <section id="transactions">
+          <section id="transactions" className="scroll-mt-20">
             <TransactionTable
               transactions={filteredTransactions}
               onDelete={deleteTransaction}
@@ -296,15 +298,20 @@ if (loading) {
           }}
         />
       </div>
-      <section id="features">
+      <section id="features" className="scroll-mt-20">
         <FeaturesSection />
       </section>
 
+<section id="about" className="scroll-mt-20">
       <AboutSection />
       <div className="flex justify-center my-16">
         <div className="w-32 border-t-2 border-gray-300 dark:border-gray-700"></div>
       </div>
-      <ContactSection />
+      </section>
+
+     <section id="contact" className="scroll-mt-20">
+  <ContactSection />
+</section>
 
       <Footer />
     </div>

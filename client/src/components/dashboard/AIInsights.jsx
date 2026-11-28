@@ -129,8 +129,11 @@ export default function AIInsights({ insights, loading, onRefresh }) {
             "
           >
 <div className="markdown-body bg-white dark:bg-gray-900 p-6 rounded-xl">
-  <ReactMarkdown>{insights}</ReactMarkdown>
-</div>        </div>
+  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+    {insights}
+  </ReactMarkdown>
+</div>
+  </div>
         </div>
       )}
     </div>

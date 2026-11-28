@@ -3,7 +3,6 @@ import {
   ArcElement,
   Tooltip,
   Legend,
-  Colors,
 } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
